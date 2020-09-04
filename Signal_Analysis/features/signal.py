@@ -192,7 +192,6 @@ def get_F_0( signal, rate, time_step = 0.0, min_pitch = 75, max_pitch = 600,
     
     #finding the global peak the way Praat does
     global_peak = max( abs( sig - sig.mean() ) ) 
-    print(type(global_peak),'\n')
     e = np.e
     inf = np.inf
     log = np.log2
