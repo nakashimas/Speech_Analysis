@@ -964,7 +964,7 @@ def get_Jitter( signal, rate, period_floor = .0001, period_ceiling = .02,
     pulses = get_Pulses( signal, rate )
     periods = np.diff( pulses )
     
-    min_period_factor = 1.0 / max_period_factor
+    min_period_factor = 1.0 / (max_period_factor + 1E-32)
     
     #finding local, absolute
     #described at:
@@ -982,7 +982,7 @@ def get_Jitter( signal, rate, period_floor = .0001, period_ceiling = .02,
                 sum_total += abs( periods[ i + 1 ] - periods[ i ] ) 
         else: num_periods -= 1
                 
-    absolute = sum_total / ( num_periods - 1 )
+    absolute = sum_total / ( num_periods - 1 + 1E-32 )
     
     #finding local, 
     #described at: 
@@ -1006,8 +1006,8 @@ def get_Jitter( signal, rate, period_floor = .0001, period_ceiling = .02,
             
     #removing duplicated edges        
     periods = periods[ 1 : -1 ]
-    avg_period = sum_total / ( num_periods ) 
-    relative = absolute / avg_period
+    avg_period = sum_total / ( num_periods + 1E-32 ) 
+    relative = absolute / ( avg_period + 1E-32 )
     
     #finding rap
     #described at: 
@@ -1027,7 +1027,7 @@ def get_Jitter( signal, rate, period_floor = .0001, period_ceiling = .02,
             
             sum_total += abs( p2 - ( p1 + p2 + p3 ) / 3.0 )
             num_periods += 1
-    rap = ( sum_total / num_periods ) / avg_period 
+    rap = ( sum_total / ( num_periods + 1E-32 ) ) / ( avg_period + 1E-32 )
           
     #finding ppq5
     #described at: 
@@ -1053,7 +1053,7 @@ def get_Jitter( signal, rate, period_floor = .0001, period_ceiling = .02,
             sum_total += abs( p3 - ( p1 + p2 + p3 +p4 + p5 ) / 5.0 )
             num_periods += 1
             
-    ppq5 = ( sum_total / num_periods ) / avg_period
+    ppq5 = ( sum_total / ( num_periods + 1E-32 ) ) / ( avg_period + 1E-32 )
             
     #Praat calculates ddp by multiplying rap by 3
     #described at:
